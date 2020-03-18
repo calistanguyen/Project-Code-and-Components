@@ -1,4 +1,10 @@
-.toRight
+.navbarStyle
 {
-    float: right; 
+    background-color: #F4CA02;
+    text-decoration-color: white; 
 }
+
+/* .navbarText
+{
+    text-decoration-color: white; 
+} */
