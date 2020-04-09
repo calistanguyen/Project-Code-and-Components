@@ -1,0 +1,47 @@
+<% include ../partials/header %>
+<div class = "container">
+    <% include ../partials/nav %>
+    <div class = "text-center">
+        <img id = "recipeImg" src = "../../resources/imgs/temp.png" class="img-fluid">
+    </div>
+    <br> 
+
+    <h1 id = "recipeName">Recipe Name <small id = "prepTime"> 15 mins</small></h1> 
+    <h6 id = "description">This recipe is yummy</p>
+    <br>
+    <table class = "table"> 
+        <thead> 
+            <tr>
+                <th scope = "col">Ready in Minutes</th>
+                <th scope = "col">Servings</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id = "minutes"> 15 </td>
+                <td id = "servings"> 5</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class = "row">
+        <div class = "col-6">
+            <h3>Ingredients</h3>
+            <ul id = "ingredientList" class="list-group">
+            </ul>
+        </div>
+
+        <div class = "col-6">
+            <h3>Directions</h3>
+            <ul id = "directionList" class="list-group">
+            </ul>
+        </div>
+
+
+        <div class = "col-6">
+
+        </div>
+    </div> 
+
+
+</div>
