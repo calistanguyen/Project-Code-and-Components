@@ -1,7 +1,7 @@
 //notes about making server
 // req -- the request coming in from the client
 // res -- the result being sent to the client
-//fs.readFile() allows node to read a file 
+//fs.readFile() allows node to read a file
 
 /***********************
   Load Components!
@@ -38,11 +38,16 @@ app.get('/profile', function(req, res){
 
 //recipe page
 app.get('/recipe', function(req,res){
+
   res.render('pages/recipe',{
 
   });
 });
 
+app.get('/test',function(req,res){
+  //call the API here, save the data
+  res.json({recipe:["broccoli","sandwich"]})
+})
+
 app.listen(3000);
 console.log('3000 is the magic port');
-
