@@ -48,6 +48,12 @@ app.get('/test',function(req,res){
   //call the API here, save the data
   res.json({recipe:["broccoli","sandwich"]})
 })
+//sign up page
+app.get('/signup', function(req,res){
+  res.render('pages/signup',{
+
+  });
+;})
 
 app.listen(3000);
 console.log('3000 is the magic port');
