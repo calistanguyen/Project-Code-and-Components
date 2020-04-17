@@ -46,7 +46,7 @@ app.get('/recipe', function(req,res){
 
 app.get('/test',function(req,res){
   //call the API here, save the data
-  res.json({recipe:["broccoli","sandwich"]})
+  //res.json({recipe:["broccoli","sandwich"]})
 })
 
 app.listen(3000);
