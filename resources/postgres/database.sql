@@ -26,7 +26,8 @@ SET default_table_access_method = heap;
 
 CREATE TABLE public.recipes (
     user_id integer NOT NULL,
-    recipe_ids integer[]
+    recipe_ids integer[],
+    recipenames text[]
 );
 
 
@@ -74,7 +75,7 @@ ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.u
 -- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.recipes (user_id, recipe_ids) FROM stdin;
+COPY public.recipes (user_id, recipe_ids, recipenames) FROM stdin;
 \.
 
 
