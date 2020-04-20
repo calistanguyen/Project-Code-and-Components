@@ -19,9 +19,19 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 //Create Database Connection
 var pgp = require('pg-promise')();
 
+//connecting tender data base
+const dbConfig = {
+  host: 'localhost', 
+  port: 5432, 
+  database: 'tender',
+  user: 'postgres'
+};
+var db = pgp(dbConfig);
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/'));//This line is necessary for us to use relative paths and access our resources directory
+
 
 //home page
 app.get('/home', function(req, res) {
@@ -54,6 +64,37 @@ app.get('/signup', function(req,res){
 
   });
 ;})
+
+app.post('/signup', function(req,res){
+  var username = req.body.username; //holds the input from the form
+  var firstname = req.body.firstname; 
+  var lastname = req.body.lastname; 
+  var password = req.body.password; 
+  var getInfo = "INSERT INTO users(firstname, lastname, password, username) VALUES('"+firstname+"','"+lastname+"', '"+password+"', '"+username+"') ON CONFLICT DO NOTHING;" ; //query to insert into table
+  db.task('get-everything', task =>{
+    return task.batch([
+      task.any(getInfo)
+    ]);
+  })
+  .then(info => {
+    console.log(username); 
+    res.render('pages/signup',{
+      user: username, 
+      fname: firstname,
+      lname: lastname, 
+      passw: password
+    })
+  })
+  .catch(err=>{
+    console.log('error', err);
+    response.render('pages/signup',{
+      user: '',
+      fname: '',
+      lname: '', 
+      passw: ''
+    })
+  })
+});
 
 app.listen(3000);
 console.log('3000 is the magic port');

@@ -84,6 +84,7 @@ COPY public.recipes (user_id, recipe_ids, recipenames) FROM stdin;
 --
 
 COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
+1	Calista	Nguyen	Password1	cnguyen
 \.
 
 
@@ -91,7 +92,7 @@ COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.users_user_id_seq', 1, true);
 
 
 --

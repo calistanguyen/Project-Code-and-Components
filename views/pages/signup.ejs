@@ -6,27 +6,28 @@
     <br>
     <h1 align = "center">Sign Up Page</h1>
     <br>
-    <form> 
+    <form action = "/signup" method = "post"> 
         <div class="form-group">
             <label for="firstname">First Name</label>
-            <input type="firstname" class="form-control" id="firstname" aria-describedby="emailHelp" placeholder="Enter first name">
+            <input type="firstname" class="form-control" name = "firstname" id="firstname" aria-describedby="emailHelp" placeholder="Enter first name">
           </div> 
           <div class="form-group">
             <label for="lastname">Last Name</label>
-            <input type="lastname" class="form-control" id="lastname" placeholder="Enter last name">
+            <input type="lastname" class="form-control" name = "lastname" id="lastname" placeholder="Enter last name">
           </div>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="username" class="form-control" id="username" placeholder="Enter username">
+            <input type="text" class="form-control" name = "username" id="username" placeholder="Enter username">
           </div> 
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <input type="password" class="form-control" name = "password" id="password" placeholder="Password">
           </div>
           <div class="form-group">
             <label for="confpassword">Confirm Password</label>
             <input type="password" class="form-control" id="confpassword">
           </div>
+         
           <div id="message" style="display:block">
             <h4>Password must contain the following:</h4>
             <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
@@ -36,7 +37,7 @@
             <p id="match" class="invalid">Password and Confirm Password Match</p>
           </div>
           <br> 
-          <button type="submit" id = "submit_signup" disabled class="btn btn-primary btn-block">Submit</button>
+            <button type="submit" id = "submit_signup" disabled class="btn btn-primary btn-block">Submit</button>
     </form>
 </div>
 </body>
@@ -121,6 +122,7 @@
                 enableButton(letter, capital, number, length, match);
 
     }
+    user = document.getElementById("username");
 }
 
 
