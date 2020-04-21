@@ -43,13 +43,13 @@ app.get('/profile', function(req, res){
 //recipe page
 app.get('/recipe', function(req,res){
 	//console.log(req);
-	var id= req.query.id;
+	var id= req.query.id;//parses the ID from the query
 	console.log(id);
-	var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';
-	request(url, {json:true}, (err,response,body)=>{
+	var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';//gets info from API
+	request(url, {json:true}, (err,response,body)=>{//calls out to API for information
 		var ingredients=body.extendedIngredients;
 		console.log(ingredients);
-		res.render('pages/recipe',{
+		res.render('pages/recipe',{ //gives information to the recipes page
 			recipe_name: body.title,
 			cook_time: body.readyInMinutes,
 			summary: body.summary,
@@ -61,26 +61,27 @@ app.get('/recipe', function(req,res){
 	})
 
 });
+//Random testing endpoint
 
-app.get('/test',function(req,res){
-  //call the API here, save the data
-  //res.json({recipe:["broccoli","sandwich"]})
-	//var id = 0;
-	var apiKey='ac9d1996174844fa8bd9d2ba7b497976';
-	var url="https://api.spoonacular.com/recipes/search?apiKey="+apiKey+"&number=1&query=sandwich";
-
-	request( url ,{json:true}, (err,response,body)=>{
-		if(err){return console.log(err);}
-		var id= JSON.parse(body.results[0].id);
-		var new_url='https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';
-		request(new_url, {json:true}, (err2,response2,body2)=> {
-			res.render('pages/recipe',{
-				recipe_name: body2.title,
-			})
-		})
-	});
-
-})
+// app.get('/test',function(req,res){
+//   //call the API here, save the data
+//   //res.json({recipe:["broccoli","sandwich"]})
+// 	//var id = 0;
+// 	var apiKey='ac9d1996174844fa8bd9d2ba7b497976';
+// 	var url="https://api.spoonacular.com/recipes/search?apiKey="+apiKey+"&number=1&query=sandwich";
+//
+// 	request( url ,{json:true}, (err,response,body)=>{
+// 		if(err){return console.log(err);}
+// 		var id= JSON.parse(body.results[0].id);
+// 		var new_url='https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';
+// 		request(new_url, {json:true}, (err2,response2,body2)=> {
+// 			res.render('pages/recipe',{
+// 				recipe_name: body2.title,
+// 			})
+// 		})
+// 	});
+//
+// })
 //sign up page
 app.get('/signup', function(req,res){
   res.render('pages/signup',{
