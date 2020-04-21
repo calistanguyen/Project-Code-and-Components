@@ -2,7 +2,7 @@
 <div class = "container">
     <% include ../partials/nav %>
     <div class = "text-center">
-        <img id = "recipeImg" src = "../../resources/imgs/temp.png" class="img-fluid">
+        <img id = "recipeImg" src = <%-image_url%> class="img-fluid">
     </div>
     <br>
 
@@ -10,8 +10,12 @@
       <%if(recipe_name){%>
         <%- recipe_name %>
       <%}%>
-      <small id = "prepTime"> 15 mins</small></h1>
-    <h6 id = "description">This recipe is yummy</p>
+    </h1>
+    <h6 id = "description">
+      <%if(summary){%>
+        <%- summary %>
+      <%}%>
+    </h6>
     <br>
     <table class = "table">
         <thead>
@@ -22,28 +26,34 @@
         </thead>
         <tbody>
             <tr>
-                <td id = "minutes"> 15 </td>
-                <td id = "servings"> 5</td>
+                <td id = "minutes">
+                  <% if(cook_time){%>
+                    <%- cook_time %>
+                  <%}%>
+                </td>
+                <td id = "servings">
+                  <% if(servings){%>
+                    <%- servings %>
+                  <%}%>
+                </td>
             </tr>
         </tbody>
     </table>
+    <a class= "btn btn-primary" role="button" href=<%-recipe_url%>>Recipe Source</a>
+
     <br>
     <div class = "row">
         <div class = "col-6">
             <h3>Ingredients</h3>
             <ul id = "ingredientList" class="list-group">
+              <%if(ingredients){
+                var list= '';
+                ingredients.forEach(function(item){
+                  list+= '<li class="list-group-item">'+ item.originalString + '</li>';
+                });%>
+                <%-list%>
+              <%}%>
             </ul>
-        </div>
-
-        <div class = "col-6">
-            <h3>Directions</h3>
-            <ul id = "directionList" class="list-group">
-            </ul>
-        </div>
-
-
-        <div class = "col-6">
-
         </div>
     </div>
 

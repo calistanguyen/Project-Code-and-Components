@@ -28,7 +28,7 @@ app.use(express.static(__dirname + '/'));//This line is necessary for us to use 
 
 //home page
 app.get('/home', function(req, res) {
-	console.log(req);
+
 	res.render('pages/home',{
 	});
 });
@@ -42,10 +42,24 @@ app.get('/profile', function(req, res){
 
 //recipe page
 app.get('/recipe', function(req,res){
+	//console.log(req);
+	var id= req.query.id;
+	console.log(id);
+	var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';
+	request(url, {json:true}, (err,response,body)=>{
+		var ingredients=body.extendedIngredients;
+		console.log(ingredients);
+		res.render('pages/recipe',{
+			recipe_name: body.title,
+			cook_time: body.readyInMinutes,
+			summary: body.summary,
+			servings: body.servings,
+			image_url: body.image,
+			ingredients: ingredients,
+			recipe_url: body.sourceUrl
+	  });
+	})
 
-  res.render('pages/recipe',{
-
-  });
 });
 
 app.get('/test',function(req,res){
@@ -62,7 +76,6 @@ app.get('/test',function(req,res){
 		request(new_url, {json:true}, (err2,response2,body2)=> {
 			res.render('pages/recipe',{
 				recipe_name: body2.title,
-
 			})
 		})
 	});
