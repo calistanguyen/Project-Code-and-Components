@@ -1,3 +1,5 @@
+console.log("Loaded functions.js");
+
 function addRecipe(recipe)
 {
     var recipeName = document.getElementById(recipe);
@@ -8,4 +10,10 @@ function addRecipe(recipe)
     added.innerText = recipeName.textContent;
     menu.appendChild(added);
 
+}
+
+function goToRecipe()
+{
+  var id= 655098;
+  
 }

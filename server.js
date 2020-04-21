@@ -28,6 +28,7 @@ app.use(express.static(__dirname + '/'));//This line is necessary for us to use 
 
 //home page
 app.get('/home', function(req, res) {
+	console.log(req);
 	res.render('pages/home',{
 	});
 });
@@ -59,7 +60,10 @@ app.get('/test',function(req,res){
 		var id= JSON.parse(body.results[0].id);
 		var new_url='https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';
 		request(new_url, {json:true}, (err2,response2,body2)=> {
-			res.json(body2);
+			res.render('pages/recipe',{
+				recipe_name: body2.title,
+
+			})
 		})
 	});
 

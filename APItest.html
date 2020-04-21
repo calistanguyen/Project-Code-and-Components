@@ -25,12 +25,9 @@
       $(document).ready(function(){
         var apiKey='ac9d1996174844fa8bd9d2ba7b497976';
         var url= 'https://api.spoonacular.com/recipes/search?query=yogurt&apiKey=ac9d1996174844fa8bd9d2ba7b497976';
-        $.ajax({url:url, dataType:"jsonp"}).then(function(data) {
+        $.ajax({url:url, dataType:"json"}).then(function(data) {
           console.log(data.number);
           document.getElementById('recipe_name').innerHTML= data.results[0].title;
-
-
-
         })
       })
 
