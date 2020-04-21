@@ -25,9 +25,20 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.recipes (
+    recipe_id integer,
+    recipe_name text,
+    recipe_url text,
+    recipe_img text
+);
+
+
+--
+-- Name: saved_recipes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.saved_recipes (
     user_id integer NOT NULL,
-    recipe_ids integer[],
-    recipenames text[]
+    recipe_id integer NOT NULL
 );
 
 
@@ -75,7 +86,15 @@ ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.u
 -- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.recipes (user_id, recipe_ids, recipenames) FROM stdin;
+COPY public.recipes (recipe_id, recipe_name, recipe_url, recipe_img) FROM stdin;
+\.
+
+
+--
+-- Data for Name: saved_recipes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.saved_recipes (user_id, recipe_id) FROM stdin;
 \.
 
 
@@ -84,7 +103,6 @@ COPY public.recipes (user_id, recipe_ids, recipenames) FROM stdin;
 --
 
 COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
-1	Calista	Nguyen	Password1	cnguyen
 \.
 
 
@@ -92,7 +110,7 @@ COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.users_user_id_seq', 1, true);
+SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
 
 
 --
