@@ -21,33 +21,42 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: recipes; Type: TABLE; Schema: public; Owner: calistanguyen
+-- Name: recipes; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.recipes (
-    user_id integer NOT NULL,
-    recipe_ids integer[]
+    recipe_id integer,
+    recipe_name text,
+    recipe_url text,
+    recipe_img text
 );
 
 
-ALTER TABLE public.recipes OWNER TO calistanguyen;
+--
+-- Name: saved_recipes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.saved_recipes (
+    user_id integer NOT NULL,
+    recipe_id integer NOT NULL
+);
+
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: calistanguyen
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.users (
     user_id integer NOT NULL,
     firstname character varying(20) NOT NULL,
     lastname character varying(20) NOT NULL,
-    password character varying(20) NOT NULL
+    password character varying(20) NOT NULL,
+    username character varying(20)
 );
 
 
-ALTER TABLE public.users OWNER TO calistanguyen;
-
 --
--- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: calistanguyen
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.users_user_id_seq
@@ -59,47 +68,53 @@ CREATE SEQUENCE public.users_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_user_id_seq OWNER TO calistanguyen;
-
 --
--- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: calistanguyen
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
 
 
 --
--- Name: users user_id; Type: DEFAULT; Schema: public; Owner: calistanguyen
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
 
 
 --
--- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: calistanguyen
+-- Data for Name: recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.recipes (user_id, recipe_ids) FROM stdin;
+COPY public.recipes (recipe_id, recipe_name, recipe_url, recipe_img) FROM stdin;
 \.
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: calistanguyen
+-- Data for Name: saved_recipes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users (user_id, firstname, lastname, password) FROM stdin;
+COPY public.saved_recipes (user_id, recipe_id) FROM stdin;
 \.
 
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: calistanguyen
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
+\.
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
 SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: calistanguyen
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.users
