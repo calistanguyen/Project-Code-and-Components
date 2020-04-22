@@ -11,70 +11,41 @@
 // }
 
 function testWebToken(){
+  // This will make an ajax call with the token stored in local storage.
+  // If there is a valid token the response should print out the username in the
+  // browser console. This is all handled in the authenticateJWT middleware function.
     $.ajax({
-        url: "http://localhost:3000/books",
+        url: "http://localhost:3000/test",
         type: 'GET',
         // Fetch the stored token from localStorage and set in the header
         headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
+    }).done((response) => {
+      console.log(response)
+      console.log("Look, you can now authenticate!")
     });
 }
 
-function completeAndRedirect(){
-    $.ajax({
-        url: "http://localhost:3000/books",
-        type: 'GET',
-        // Fetch the stored token from localStorage and set in the header
-        headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
-    });
-}
-
-function successLogin(response){
-    console.log(response)
-    
-    // we'll set the token to localStorage
-    // localStorage.setItem('token') = response.token ??
-    
-    $.ajax({
-     url: "http://localhost:3000/home",
-     type: 'GET',
-     // Fetch the stored token from localStorage and set in the header
-     headers: {"Authorization": localStorage.getItem('token')}
-    });
-}
-
-// $.ajax({
-//     type: 'POST',
-//     url: $("form").attr("action"),
-//     data: $("form").serialize(),
-//     success: successLogin(response)
-//   });
-
-  $("form").submit(function() {
-      console.log('is this working???');
-
+$(document).ready(() => {
+  $("#loginform").submit((event) => {
     /* stop form from submitting normally */
-
-    var $theForm = $(this);
+    event.preventDefault();
+    var form = $("#loginform");
     $.ajax({
-        type: $theForm.attr('method'),
-        url: $theForm.attr('action'),
-             data: $theForm.serialize(),
-             success: function(data) {
-                 console.log('Yay! Form sent.');
-                 }
-                });
+      type: form.attr('method'),
+      url: form.attr('action'),
+      data: form.serialize()
+    }).done((response) => {
+      localStorage.setItem('token', response.accessToken);
+      location.href = "/home";
+      });
+    });
+})
 
-    return false; 
-
-    /* get the action attribute from the <form action=""> element */
-    // var $form = $( this ),
-    //     url = $form.attr( 'action' );
-
-    // /* Send the data using post with element id name and name2*/
-    // var posting = $.post( url, { uname: $('#uname').val(), pword: $('#pword').val() }, );
-
-    // /* Alerts the results */
-    // posting.done(function( data ) {
-    //   console.log(data);
-    // });
-  });
+$(document).ready(() => {
+  // I added a body tag to your profile page. 
+  // If this page loads, it will run the testWebToken() function
+  if($('body').is('.profile')){
+    console.log("Home loaded")
+    testWebToken()
+  }
+})

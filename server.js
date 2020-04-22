@@ -31,11 +31,11 @@ var db = pgp(dbConfig);
 const users = [
   {
       username: 'john',
-      password: 'password123admin',
+      password: 'pw',
       role: 'admin'
   }, {
       username: 'anna',
-      password: 'password123member',
+      password: 'pw',
       role: 'member'
   }
 ];
@@ -56,24 +56,35 @@ const authenticateJWT = (req, res, next) => {
 
       jwt.verify(token, accessTokenSecret, (err, data) => {
           if (err) {
-              return res.sendStatus(403);
+            req.user = null;
+            next()
           }
-
-          console.log(data);
-          next();
+          if(data != undefined){
+            req.user = data.username
+            next();
+          }else{
+            req.user = null;
+            next();
+          }
       });
   } else {
-      res.sendStatus(401); 
+      req.user = null;
+      next();
   }
 };
 
-// app.get('/books', authenticateJWT, (req, res) => {
-//   res.json(books);
-// });
+app.get('/test', authenticateJWT, (req, res) => {
+  if(req.user != null){
+    res.send({succes: true, user: req.user});
+  } else {
+    res.send({succes: false, user: null});
+  }
 
+});
 
 
 app.post('/login', (req, res) => {
+  console.log("Reaching this?")
   // Read username and password from request body
   const username = req.body.uname;
   const password = req.body.pword; 
@@ -84,15 +95,16 @@ app.post('/login', (req, res) => {
   if (user) {
       // Generate an access token
       const accessToken = jwt.sign({ username: user.username,  role: user.role }, accessTokenSecret);
-      console.log(accessToken);
-      // res.json({accessToken: accessToken })
+      console.log("Returning response")
+      res.json({accessToken: accessToken })
   } else {
-      res.send('Username or password incorrect');
+      res.json({result: 'Username or password incorrect'});
   }
 });
 
 //home page
-app.get('/home', function(req, res) {
+app.get('/home', authenticateJWT, function(req, res) {
+  console.log(req.user)
   res.render('pages/home',{
 
   });
