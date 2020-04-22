@@ -1,6 +1,7 @@
 console.log("Loaded functions.js");
 var apiKey= "ac9d1996174844fa8bd9d2ba7b497976";
 var currentID=0;
+var savedID;
 
 function setCurrID(id)
 {
@@ -27,4 +28,9 @@ function randomizeRecipe()
     document.getElementById('desc').innerHTML= data.recipes[0].summary;
     document.getElementById('goto-recipe').setAttribute("data-currID", currentID);
   })
+}
+
+function addRecipe()//used for demo only
+{
+  window.location.href="/profile?id="+currentID;
 }

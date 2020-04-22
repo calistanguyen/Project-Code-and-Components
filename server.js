@@ -24,8 +24,8 @@ var pgp = require('pg-promise')();
 
 //connecting tender data base
 const dbConfig = {
-  host: 'localhost', 
-  port: 5432, 
+  host: 'localhost',
+  port: 5432,
   database: 'tender',
   user: 'postgres'
 };
@@ -46,9 +46,17 @@ app.get('/home', function(req, res) {
 
 //profile page
 app.get('/profile', function(req, res){
-  res.render('pages/profile',{
-
-  });
+  var id= req.query.id;//parses the ID from the query
+  console.log(id);
+  var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';//gets info from API
+  request(url, {json:true}, (err,response,body)=>{//calls out to API for information
+    res.render('pages/profile',{ //gives information to the recipes page
+      recipe_name: body.title,
+      cook_time: body.readyInMinutes,
+      image_url: body.image,
+      recipe_url: body.sourceUrl
+    });
+  })
 });
 
 //recipe page
@@ -102,9 +110,9 @@ app.get('/signup', function(req,res){
 
 app.post('/signup', function(req,res){
   var username = req.body.username; //holds the input from the form
-  var firstname = req.body.firstname; 
-  var lastname = req.body.lastname; 
-  var password = req.body.password; 
+  var firstname = req.body.firstname;
+  var lastname = req.body.lastname;
+  var password = req.body.password;
   var getInfo = "INSERT INTO users(firstname, lastname, password, username) VALUES('"+firstname+"','"+lastname+"', '"+password+"', '"+username+"') ON CONFLICT DO NOTHING;" ; //query to insert into table
   db.task('get-everything', task =>{
     return task.batch([
@@ -112,11 +120,11 @@ app.post('/signup', function(req,res){
     ]);
   })
   .then(info => {
-    console.log(username); 
+    console.log(username);
     res.render('pages/signup',{
-      user: username, 
+      user: username,
       fname: firstname,
-      lname: lastname, 
+      lname: lastname,
       passw: password
     })
   })
@@ -125,7 +133,7 @@ app.post('/signup', function(req,res){
     response.render('pages/signup',{
       user: '',
       fname: '',
-      lname: '', 
+      lname: '',
       passw: ''
     })
   })
