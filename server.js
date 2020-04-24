@@ -60,7 +60,7 @@ const authenticateJWT = (req, res, next) => {
             next()
           }
           if(data != undefined){
-            req.user = data.username
+            req.userId = data.userId
             next();
           }else{
             req.user = null;
@@ -73,11 +73,12 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-app.get('/test', authenticateJWT, (req, res) => {
-  if(req.user != null){
-    res.send({succes: true, user: req.user});
+app.get('/profile_info', authenticateJWT, (req, res) => {
+  if(req.userId != null){
+    // make database call using userId
+    res.send({authenticated: true, email: req.user});
   } else {
-    res.send({succes: false, user: null});
+    res.send({authenticated: false, user: null});
   }
 
 });
@@ -90,11 +91,12 @@ app.post('/login', (req, res) => {
   const password = req.body.pword; 
 
   // Filter user from the users array by username and password
+  // replace with call to database to someone check if username and password exists, and are correct.
   const user = users.find(u => { return u.username === username && u.password === password }); //query to our database
-
+  
   if (user) {
       // Generate an access token
-      const accessToken = jwt.sign({ username: user.username,  role: user.role }, accessTokenSecret);
+      const accessToken = jwt.sign({ userId: user.id,  role: user.role }, accessTokenSecret);
       console.log("Returning response")
       res.json({accessToken: accessToken })
   } else {
