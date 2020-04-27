@@ -34,18 +34,35 @@ function loginButton(){ //alerts the user if their username or password is wrong
     headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
   }).done((response) => {
   // do stuff with response
-  if(response.authenticated)
+  if(!response.authenticated)
   {
     alert('Wrong Username or Password!');
   }
 });
 }
 
+
 $(document).ready(() => {
   $("#loginform").submit((event) => {
     /* stop form from submitting normally */
     event.preventDefault();
     var form = $("#loginform");
+    $.ajax({
+      type: form.attr('method'),
+      url: form.attr('action'),
+      data: form.serialize()
+    }).done((response) => {
+      localStorage.setItem('token', response.accessToken);
+      location.href = "/home";
+      });
+    });
+})
+
+$(document).ready(() => {
+  $("#signupform").submit((event) => {
+    /* stop form from submitting normally */
+    event.preventDefault();
+    var form = $("#signupform");
     $.ajax({
       type: form.attr('method'),
       url: form.attr('action'),

@@ -16,8 +16,7 @@ function getProfileInfo(){
   
       if (response.authenticated){
         console.log('YESSS');
-      	  $('#name').html(response.name);
-          $('#email').html(response.html)
+      	  $('#name').html(response.name); //id 
           $('#user').html(response.username);
       } else {
 		  loadDefaultProfile();

@@ -51,7 +51,8 @@ CREATE TABLE public.users (
     firstname character varying(20) NOT NULL,
     lastname character varying(20) NOT NULL,
     password character varying(20) NOT NULL,
-    username character varying(20)
+    username character varying(20),
+    img text
 );
 
 
@@ -102,7 +103,7 @@ COPY public.saved_recipes (user_id, recipe_id) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
+COPY public.users (user_id, firstname, lastname, password, username, img) FROM stdin;
 \.
 
 
