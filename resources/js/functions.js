@@ -26,6 +26,21 @@ function testWebToken(){
     });
 }
 
+function loginButton(){ //alerts the user if their username or password is wrong
+  $.ajax({
+    url: "http://localhost:3000/profile_info",
+    type: 'GET',
+    // Fetch the stored token from localStorage and set in the header
+    headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
+  }).done((response) => {
+  // do stuff with response
+  if(response.authenticated)
+  {
+    alert('Wrong Username or Password!');
+  }
+});
+}
+
 $(document).ready(() => {
   $("#loginform").submit((event) => {
     /* stop form from submitting normally */

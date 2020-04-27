@@ -1,5 +1,6 @@
 function loadDefaultProfile(){
-	// just put generic pictures or emails etc,. 
+  // just put generic pictures or emails etc,. 
+  document.getElementById('name').innerText = "You have not logged in yet!";
 } 
 
 function getProfileInfo(){
@@ -12,11 +13,14 @@ function getProfileInfo(){
         // Fetch the stored token from localStorage and set in the header
         headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
     }).done((response) => {
+  
       if (response.authenticated){
-      	    $('profile_img').setImage(response.imgURL);
-      		$('#email').html(response.html)
+        console.log('YESSS');
+      	  $('#name').html(response.name);
+          $('#email').html(response.html)
+          $('#user').html(response.username);
       } else {
-		loadDefaultProfile();
+		  loadDefaultProfile();
       }
 
     });

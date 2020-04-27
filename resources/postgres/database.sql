@@ -114,6 +114,14 @@ SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
 
 
 --
+-- Name: users users_firstname_lastname_password_username_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_firstname_lastname_password_username_key UNIQUE (firstname, lastname, password, username);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 

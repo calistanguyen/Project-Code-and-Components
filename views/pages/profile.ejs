@@ -1,8 +1,9 @@
 <%- include("../partials/header") %>
+<script type = "text/javascript" src = "../../resources/js/profile.js"></script>
 
-<body class='profile'>
+<body class='profile' onload = "getProfileInfo()">
   <div class = "container">
-      <% include("../partials/nav")%>
+    <%- include('../partials/nav')%>
       <br> 
       <div class = "text-center">
           <img id = "profilePic" src = "../../resources/imgs/tempprofile.png" class = "rounded-circle" alt = "Picture of me" width = "300" lenth = "500">
@@ -10,12 +11,10 @@
           <h3 id = "name"> My Name</h3>
       </div>
       <br> 
-      <p>Email: </p>  
-      <p id = "email"> example@email.com</p>
-      <p>Password: </p>
-      <p type = "password" id = "password"> </p>
+      <p>Username: </p>  
+      <p id = "user"></p>
       <p>Change Profile Picture:</p>
-      <form>
+      <form action = "/insertPhoto" method = "post">
       <input type="file" id="img" name="img" accept="image/*">
       <input type="submit">
       </form>

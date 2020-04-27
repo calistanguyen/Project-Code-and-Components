@@ -60,7 +60,10 @@ const authenticateJWT = (req, res, next) => {
             next()
           }
           if(data != undefined){
-            req.userId = data.userId
+            //req.userId = data.userId;
+            req.user = data.userId; 
+            req.name = data.firstname; 
+
             next();
           }else{
             req.user = null;
@@ -74,11 +77,11 @@ const authenticateJWT = (req, res, next) => {
 };
 
 app.get('/profile_info', authenticateJWT, (req, res) => {
-  if(req.userId != null){
+  if(req.user != null){
     // make database call using userId
-    res.send({authenticated: true, email: req.user});
+    res.send({authenticated: true, username: req.user, name: req.name});
   } else {
-    res.send({authenticated: false, user: null});
+    res.send({authenticated: false, username: null, name: null});
   }
 
 });
@@ -86,23 +89,45 @@ app.get('/profile_info', authenticateJWT, (req, res) => {
 
 app.post('/login', (req, res) => {
   console.log("Reaching this?")
-  // Read username and password from request body
+  //Read username and password from request body
   const username = req.body.uname;
   const password = req.body.pword; 
 
   // Filter user from the users array by username and password
   // replace with call to database to someone check if username and password exists, and are correct.
-  const user = users.find(u => { return u.username === username && u.password === password }); //query to our database
-  
-  if (user) {
+  //const user = users.find(u => { return u.username === username && u.password === password }); //query to our database
+
+  var user = "SELECT * FROM users WHERE username = '" + username + "' and password = '" + password + "';"; //query
+
+  db.any(user)
+  .then(function(rows){
       // Generate an access token
-      const accessToken = jwt.sign({ userId: user.id,  role: user.role }, accessTokenSecret);
-      console.log("Returning response")
-      res.json({accessToken: accessToken })
-  } else {
-      res.json({result: 'Username or password incorrect'});
-  }
+      if(rows.length>0)//if there is data in the query
+      {
+        const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, firstname: rows[0].firstname}, accessTokenSecret);
+        console.log("Returning response")
+        res.json({accessToken: accessToken })
+      }
+      else //if there is no data in the query
+      {
+        res.json({result: 'Username or password incorrect'});
+      }
+  })
+  .catch(function(err){
+    console.log(err);
+  })
+  
+  // if (user) {
+  //     // Generate an access token
+  //     const accessToken = jwt.sign({ userId: username,  role: user.role }, accessTokenSecret);
+  //     console.log("Returning response")
+  //     res.json({accessToken: accessToken })
+  // } else {
+  //     res.json({result: 'Username or password incorrect'});
+  // }
+  
 });
+
 
 //home page
 app.get('/home', authenticateJWT, function(req, res) {
@@ -135,58 +160,34 @@ app.get('/test',function(req,res){
 
 app.get('/signup', function(req,res){
 
-  res.render('pages/signup',{
-
-  });
-});
-app.get('/login', function(req,res){
-  var username = req.query.uname; 
-  var password = req.query.pword; 
-  var getUser = "SELECT * FROM users WHERE username = " +username+" AND password = "+password+";";
-  db.any(getUser)
-    .then(function(rows){
-      res.render('pages/home',{
-        user: rows
-      })
-    })
-    .catch(function(err){
-      console.log('error', err);
-      res.render('pages/home', {
-        user: ''
-      })
-    })
-
-  
+  res.render('pages/signup');
 });
 
 
 
-app.post('/signup/home', function(req,res){
-  var username = req.body.username; //holds the input from the form
+app.post('/signup', function(req,res){
+  var username = req.body.username; //receive all the input from the 
   var firstname = req.body.firstname; 
   var lastname = req.body.lastname; 
   var password = req.body.password; 
   var setInfo = "INSERT INTO users(firstname, lastname, password, username) VALUES('"+firstname+"','"+lastname+"', '"+password+"', '"+username+"') ON CONFLICT DO NOTHING;" ; //query to insert into table
-  var getInfo = "SELECT * FROM users;"
-  db.task('get-everything', task =>{ //
-    return task.batch([ //returns promise fulfillment or rejectioon
-      task.any(setInfo),
-      task.any(getInfo)
-    ]);
+  db.any(setInfo)
+  .then(function(rows){
+    res.render('pages/home');
   })
-  .then(info => {
-    console.log(username); 
-    res.render('pages/home',{
-      user: info[1]
-    })
-  })
-  .catch(err=>{
-    console.log('error', err);
-    response.render('pages/home',{
-      user: ''
-    })
+  .catch(function(err){
+    console.log(err); 
   })
 });
+
+// app.post('/insertPhoto', function(req, res){
+//   var pic = req.body.img;
+//   var setPic = "INSERT INTO users (img) VALUES('"+pic+"');";
+//   db.any(setPic)
+//   .then(function(rows){
+//     res.render('pages/profile')
+//   })
+// })
 
 
 app.listen(3000);
