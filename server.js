@@ -10,6 +10,7 @@
   Body-Parser  - A tool to help use parse the data in a post request
   Pg-Promise   - A database tool to help use connect to our PostgreSQL database
 ***********************/
+require('dotenv').config();
 var express = require('express'); //Ensure our express framework has been added
 var app = express();
 var bodyParser = require('body-parser'); //Ensure our body-parser tool has been added
@@ -21,10 +22,11 @@ var pgp = require('pg-promise')();
 
 //connecting tender data base
 const dbConfig = {
-  host: 'localhost', 
-  port: 5432, 
-  database: 'tender',
-  user: 'postgres'
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT,
+  database: process.env.DATABASE_NAME,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD
 };
 var db = pgp(dbConfig);
 
@@ -48,8 +50,8 @@ app.use(express.static(__dirname + '/'));//This line is necessary for us to use 
 
 const accessTokenSecret = 'tenderproject';
 
-const authenticateJWT = (req, res, next) => { 
-  const authHeader = req.headers.authorization; 
+const authenticateJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
   if (authHeader) {
       const token = authHeader.split(' ')[1];
@@ -57,27 +59,30 @@ const authenticateJWT = (req, res, next) => {
       jwt.verify(token, accessTokenSecret, (err, data) => {
           if (err) {
             req.user = null;
+            req.authenticated=false;
             next()
           }
           if(data != undefined){
             //req.userId = data.userId;
-            req.user = data.userId; 
-            req.name = data.firstname; 
-
+            req.user = data.userId;
+            req.name = data.firstname;
+            req.authenticated=true;
             next();
           }else{
             req.user = null;
+            req.authenticated=false;
             next();
           }
       });
   } else {
       req.user = null;
+      req.authenticated=false;
       next();
   }
 };
 
 app.get('/profile_info', authenticateJWT, (req, res) => {
-  if(req.user != null){
+  if(req.authenticated==true){
     // make database call using userId
     res.send({authenticated: true, username: req.user, name: req.name});
   } else {
@@ -91,7 +96,7 @@ app.post('/login', (req, res) => {
   console.log("Reaching this?")
   //Read username and password from request body
   const username = req.body.uname;
-  const password = req.body.pword; 
+  const password = req.body.pword;
 
   // Filter user from the users array by username and password
   // replace with call to database to someone check if username and password exists, and are correct.
@@ -101,22 +106,24 @@ app.post('/login', (req, res) => {
 
   db.any(user)
   .then(function(rows){
+    console.log(rows);
       // Generate an access token
+      console.log(rows.length);
       if(rows.length>0)//if there is data in the query
       {
         const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, firstname: rows[0].firstname}, accessTokenSecret);
         console.log("Returning response")
-        res.json({accessToken: accessToken })
+        res.json({accessToken: accessToken, success: true})
       }
       else //if there is no data in the query
       {
-        res.json({result: 'Username or password incorrect'});
+        res.json({success: false});
       }
   })
   .catch(function(err){
     console.log(err);
   })
-  
+
   // if (user) {
   //     // Generate an access token
   //     const accessToken = jwt.sign({ userId: username,  role: user.role }, accessTokenSecret);
@@ -125,7 +132,7 @@ app.post('/login', (req, res) => {
   // } else {
   //     res.json({result: 'Username or password incorrect'});
   // }
-  
+
 });
 
 
@@ -166,17 +173,17 @@ app.get('/signup', function(req,res){
 
 
 app.post('/signup', function(req,res){
-  var username = req.body.username; //receive all the input from the 
-  var firstname = req.body.firstname; 
-  var lastname = req.body.lastname; 
-  var password = req.body.password; 
+  var username = req.body.username; //receive all the input from the
+  var firstname = req.body.firstname;
+  var lastname = req.body.lastname;
+  var password = req.body.password;
   var setInfo = "INSERT INTO users(firstname, lastname, password, username) VALUES('"+firstname+"','"+lastname+"', '"+password+"', '"+username+"') ON CONFLICT DO NOTHING;" ; //query to insert into table
   db.any(setInfo)
   .then(function(rows){
     res.render('pages/home');
   })
   .catch(function(err){
-    console.log(err); 
+    console.log(err);
   })
 });
 

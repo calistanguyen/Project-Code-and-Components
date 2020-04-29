@@ -1,7 +1,7 @@
 function loadDefaultProfile(){
-  // just put generic pictures or emails etc,. 
+  // just put generic pictures or emails etc,.
   document.getElementById('name').innerText = "You have not logged in yet!";
-} 
+}
 
 function getProfileInfo(){
   // This will make an ajax call with the token stored in local storage.
@@ -13,13 +13,13 @@ function getProfileInfo(){
         // Fetch the stored token from localStorage and set in the header
         headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
     }).done((response) => {
-  
+
       if (response.authenticated){
         console.log('YESSS');
-      	  $('#name').html(response.name); //id 
+      	  $('#name').html(response.name); //id
           $('#user').html(response.username);
       } else {
-		  loadDefaultProfile();
+		      loadDefaultProfile();
       }
 
     });

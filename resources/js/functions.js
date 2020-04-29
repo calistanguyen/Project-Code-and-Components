@@ -26,20 +26,20 @@ function testWebToken(){
     });
 }
 
-function loginButton(){ //alerts the user if their username or password is wrong
-  $.ajax({
-    url: "http://localhost:3000/profile_info",
-    type: 'GET',
-    // Fetch the stored token from localStorage and set in the header
-    headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
-  }).done((response) => {
-  // do stuff with response
-  if(!response.authenticated)
-  {
-    alert('Wrong Username or Password!');
-  }
-});
-}
+// function loginButton(){ //alerts the user if their username or password is wrong
+//   $.ajax({
+//     url: "http://localhost:3000/profile_info",
+//     type: 'GET',
+//     // Fetch the stored token from localStorage and set in the header
+//     headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
+//   }).done((response) => {
+//   // do stuff with response
+//   if(response.authenticated==false)
+//   {
+//     alert('Wrong Username or Password!');
+//   }
+// });
+// }
 
 
 $(document).ready(() => {
@@ -52,8 +52,14 @@ $(document).ready(() => {
       url: form.attr('action'),
       data: form.serialize()
     }).done((response) => {
-      localStorage.setItem('token', response.accessToken);
-      location.href = "/home";
+      console.log(response);
+      if(response.success == true){
+        localStorage.setItem('token', response.accessToken);
+        location.href="/profile";
+      }else{
+        alert('Wrong username or password!');
+        location.href = "/home";
+      }
       });
     });
 })
@@ -74,11 +80,11 @@ $(document).ready(() => {
     });
 })
 
-$(document).ready(() => {
-  // I added a body tag to your profile page. 
-  // If this page loads, it will run the testWebToken() function
-  if($('body').is('.profile')){
-    console.log("Home loaded")
-    testWebToken()
-  }
-})
+// $(document).ready(() => {
+//   // I added a body tag to your profile page.
+//   // If this page loads, it will run the testWebToken() function
+//   if($('body').is('.profile')){
+//     console.log("Home loaded")
+//     testWebToken()
+//   }
+// })
