@@ -18,6 +18,8 @@ function getProfileInfo(){
         console.log('YESSS');
       	  $('#name').html(response.name); //id
           $('#user').html(response.username);
+
+          //for each loop for all the recipes needed??
       } else {
 		      loadDefaultProfile();
       }
