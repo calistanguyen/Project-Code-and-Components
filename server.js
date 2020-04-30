@@ -128,8 +128,10 @@ app.post('/login', (req, res) => {
 
 });
 
-app.get('/add',authenticateJWT, function(req, res){
+app.post('/add',authenticateJWT, function(req, res){
   //take id from the page and info from the token and put it into the table
+  console.log(req.body.id);
+
 });
 
 
