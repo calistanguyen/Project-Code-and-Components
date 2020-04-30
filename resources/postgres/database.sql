@@ -51,7 +51,8 @@ CREATE TABLE public.users (
     firstname character varying(20) NOT NULL,
     lastname character varying(20) NOT NULL,
     password character varying(20) NOT NULL,
-    username character varying(20)
+    username character varying(20),
+    img text
 );
 
 
@@ -102,7 +103,7 @@ COPY public.saved_recipes (user_id, recipe_id) FROM stdin;
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
+COPY public.users (user_id, firstname, lastname, password, username, img) FROM stdin;
 \.
 
 
@@ -111,6 +112,14 @@ COPY public.users (user_id, firstname, lastname, password, username) FROM stdin;
 --
 
 SELECT pg_catalog.setval('public.users_user_id_seq', 1, false);
+
+
+--
+-- Name: users users_firstname_lastname_password_username_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_firstname_lastname_password_username_key UNIQUE (firstname, lastname, password, username);
 
 
 --
