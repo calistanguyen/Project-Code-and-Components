@@ -57,6 +57,7 @@ const authenticateJWT = (req, res, next) => {
             //req.userId = data.userId;
             req.user = data.userId;
             req.name = data.firstname;
+            req.id = data.id; 
             req.authenticated=true;
             next();
           }else{
@@ -77,7 +78,7 @@ app.get('/profile_info', authenticateJWT, (req, res) => {
 
   if(req.authenticated==true){
     // make database call using userId
-    res.send({authenticated: true, username: req.user, name: req.name});
+    res.send({authenticated: true, username: req.user, name: req.name, userid: req.id});
   } else {
     res.send({authenticated: false, username: null, name: null});
   }
@@ -104,7 +105,7 @@ app.post('/login', (req, res) => {
       console.log(rows.length);
       if(rows.length>0)//if there is data in the query
       {
-        const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, firstname: rows[0].firstname}, accessTokenSecret);
+        const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, firstname: rows[0].firstname, id: rows[0].user_id}, accessTokenSecret);
         console.log("Returning response")
         res.json({accessToken: accessToken, success: true})
       }
@@ -131,6 +132,17 @@ app.post('/login', (req, res) => {
 app.post('/add',authenticateJWT, function(req, res){
   //take id from the page and info from the token and put it into the table
   console.log(req.body.id);
+  console.log(req.id); 
+  var userId = req.id; 
+  var recipeId = req.body.id; 
+  var addRecipe = "INSERT INTO saved_recipes(user_id, recipe_id) VALUES(" + userId + ", '"+recipeId + "');";
+  db.any(addRecipe)
+  .then(function(rows){
+    res.render('pages/home');
+  })
+  .catch(function(err){
+    console.log(err);
+  })
 
 });
 
