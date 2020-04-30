@@ -2,7 +2,7 @@
 
 <div class = "container">
     <%- include('../partials/nav')%>
-    <br> 
+    <br>
     <div class = "jumbotron">
         <h1>Welcome to Tender!</h1>
         <p>Tender is an online web application that allows you to pick and choose random recipes generated below until you find
@@ -11,31 +11,30 @@
     <br>
     <!-- Card for user to "swipe" left and right on-->
 
-    <p id = "test1"> Name: </p> 
+    <p id = "test1"> Name: </p>
     <div class="container py-3">
         <div class="card">
           <div class="row ">
             <div class="col-md-4">
-                <img id = "recipepic" src="../../resources/imgs/temp.png" class="w-100">
+                <img id = "recipePic" src="../../resources/imgs/temp.png" class="w-100">
               </div>
               <div class="col-md-8 px-3">
                     <div class="card-block px-3">
                         <h4  id = "recipeName" class="card-title">Recipe Name</h4>
                         <p id = "prepTime" class="card-text">Prep Time</p>
-                        <p id = "calories" class = "card-text">Calories</p>
                         <p id = "desc" class = "card-text">This recipe is...</p>
                         <br>
-                        <a class="btn btn-primary" href="/recipe" role="button">Go to Recipe</a>
+                        <button type="button" class="btn btn-primary" onclick= "goToRecipe()">Go To Recipe</button>
                         <button type="button" class="btn btn-success">Add to Inventory</button>
-                        <button type="button" class="btn btn-danger">New Recipe</button>
+                        <button type="button" class="btn btn-danger" onclick="randomizeRecipe()">New Recipe</button>
                     </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    
+
 </div>
 
-           
+
 <%- include('../partials/footer')%>
