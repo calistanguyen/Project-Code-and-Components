@@ -150,16 +150,28 @@ app.post('/add',authenticateJWT, function(req, res){
 //home page
 app.get('/home', authenticateJWT, function(req, res) {
   console.log(req.user)
-  res.render('pages/home',{
-
-  });
+  res.render('pages/home'); 
 });
 
 //profile page
-app.get('/profile', function(req, res){
-  res.render('pages/profile',{
-
-  });
+app.get('/profile', authenticateJWT, function(req, res){
+  var user = req.id; 
+  console.log(user);
+  var recipes = "SELECT * FROM saved_recipes WHERE user_id = " + user + ";";
+  console.log(recipes);
+  db.any(recipes)
+  .then(function(rows){
+    console.log(rows);
+    res.render('pages/profile',{
+      recipes: rows,
+    })
+  })
+  .catch(function(err){
+    console.log(err);
+    res.render('pages/profile', {
+      recipes: '',
+    });
+  })
 });
 
 //recipe page

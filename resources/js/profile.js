@@ -26,9 +26,20 @@ function getProfileInfo(){
 
     });
 }
+function getUserCards()
+{
+  $.ajax({
+    url: "http://localhost:3000/profile",
+    type: 'GET',
+    // Fetch the stored token from localStorage and set in the header
+    headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
+    }).done((response) => {
+});
+}
 
 $("document").ready(() =>{
 	if($('body').is('.profile')){
-    	getProfileInfo()
+      getProfileInfo()
+      getUserCards()
     }
 })

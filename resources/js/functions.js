@@ -113,7 +113,7 @@ function addRecipeToInv()
   console.log(currentID);
   $.ajax({
       url: "http://localhost:3000/add",
-      type: 'POST',
+      type: 'GET',
       data: {id: currentID},
       //id: currentID,
       // Fetch the stored token from localStorage and set in the header
