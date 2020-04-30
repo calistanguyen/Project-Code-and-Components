@@ -74,6 +74,7 @@ const authenticateJWT = (req, res, next) => {
 
 app.get('/profile_info', authenticateJWT, (req, res) => {
   //query for all recipes that a user has saved
+
   if(req.authenticated==true){
     // make database call using userId
     res.send({authenticated: true, username: req.user, name: req.name});
@@ -125,6 +126,10 @@ app.post('/login', (req, res) => {
   //     res.json({result: 'Username or password incorrect'});
   // }
 
+});
+
+app.get('/add',authenticateJWT, function(req, res){
+  //take id from the page and info from the token and put it into the table
 });
 
 

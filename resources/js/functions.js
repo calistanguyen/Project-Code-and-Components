@@ -108,3 +108,8 @@ function randomizeRecipe()
     document.getElementById('goto-recipe').setAttribute("data-currID", currentID);
   })
 }
+
+function addRecipeToInv()
+{
+  
+}
