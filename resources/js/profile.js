@@ -33,6 +33,11 @@ function getUserCards()
     // Fetch the stored token from localStorage and set in the header
     headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
     }).done((response) => {
+      if (response.recipe_arr.status=="failure")
+      {
+        alert('There was an issue loading your recipes!');
+        return;
+      }
       if(response.authenticated==true)
       {
         var cards= "";
