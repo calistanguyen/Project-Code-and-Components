@@ -3,35 +3,20 @@ console.log("Loaded functions.js");
 var apiKey= "ac9d1996174844fa8bd9d2ba7b497976";
 var currentID=0;
 
-function testWebToken(){
-  // This will make an ajax call with the token stored in local storage.
-  // If there is a valid token the response should print out the username in the
-  // browser console. This is all handled in the authenticateJWT middleware function.
-    $.ajax({
-        url: "http://localhost:3000/profile_info",
-        type: 'GET',
-        // Fetch the stored token from localStorage and set in the header
-        headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
-    }).done((response) => {
-      // do stuff with response
-      console.log(response)
-      console.log("Look, you can now authenticate!")
-    });
-}
-
-// function loginButton(){ //alerts the user if their username or password is wrong
-//   $.ajax({
-//     url: "http://localhost:3000/profile_info",
-//     type: 'GET',
-//     // Fetch the stored token from localStorage and set in the header
-//     headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
-//   }).done((response) => {
-//   // do stuff with response
-//   if(response.authenticated==false)
-//   {
-//     alert('Wrong Username or Password!');
-//   }
-// });
+// function testWebToken(){
+//   // This will make an ajax call with the token stored in local storage.
+//   // If there is a valid token the response should print out the username in the
+//   // browser console. This is all handled in the authenticateJWT middleware function.
+//     $.ajax({
+//         url: "http://localhost:3000/profile_info",
+//         type: 'GET',
+//         // Fetch the stored token from localStorage and set in the header
+//         headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
+//     }).done((response) => {
+//       // do stuff with response
+//       console.log(response)
+//       console.log("Look, you can now authenticate!")
+//     });
 // }
 
 
@@ -72,15 +57,6 @@ $(document).ready(() => {
       });
     });
 })
-
-// $(document).ready(() => {
-//   // I added a body tag to your profile page.
-//   // If this page loads, it will run the testWebToken() function
-//   if($('body').is('.profile')){
-//     console.log("Home loaded")
-//     testWebToken()
-//   }
-// })
 
 function setCurrID(id)
 {
@@ -137,4 +113,8 @@ function addRecipeToInv()
       alert("There was an error trying to add this recipe!");s
     }
   });
+}
+function logout()
+{
+  localStorage.removeItem('token');
 }

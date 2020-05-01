@@ -153,15 +153,6 @@ app.post('/login', (req, res) => {
     console.log(err);
   })
 
-  // if (user) {
-  //     // Generate an access token
-  //     const accessToken = jwt.sign({ userId: username,  role: user.role }, accessTokenSecret);
-  //     console.log("Returning response")
-  //     res.json({accessToken: accessToken })
-  // } else {
-  //     res.json({result: 'Username or password incorrect'});
-  // }
-
 });
 
 app.post('/add',authenticateJWT, function(req, res){
@@ -217,27 +208,7 @@ app.get('/recipe', function(req,res){
 	})
 
 });
-//Random testing endpoint
 
-// app.get('/test',function(req,res){
-//   //call the API here, save the data
-//   //res.json({recipe:["broccoli","sandwich"]})
-// 	//var id = 0;
-// 	var apiKey='ac9d1996174844fa8bd9d2ba7b497976';
-// 	var url="https://api.spoonacular.com/recipes/search?apiKey="+apiKey+"&number=1&query=sandwich";
-//
-// 	request( url ,{json:true}, (err,response,body)=>{
-// 		if(err){return console.log(err);}
-// 		var id= JSON.parse(body.results[0].id);
-// 		var new_url='https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';
-// 		request(new_url, {json:true}, (err2,response2,body2)=> {
-// 			res.render('pages/recipe',{
-// 				recipe_name: body2.title,
-// 			})
-// 		})
-// 	});
-//
-// })
 //sign up page
 
 app.get('/signup', function(req,res){
@@ -262,14 +233,6 @@ app.post('/signup', function(req,res){
   })
 });
 
-// app.post('/insertPhoto', function(req, res){
-//   var pic = req.body.img;
-//   var setPic = "INSERT INTO users (img) VALUES('"+pic+"');";
-//   db.any(setPic)
-//   .then(function(rows){
-//     res.render('pages/profile')
-//   })
-// })
 
 
 app.listen(3000);
