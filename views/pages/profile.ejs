@@ -4,14 +4,14 @@
 <body class='profile' onload = "getProfileInfo()">
   <div class = "container">
     <%- include('../partials/nav')%>
-      <br> 
+      <br>
       <div class = "text-center">
           <img id = "profilePic" src = "../../resources/imgs/tempprofile.png" class = "rounded-circle" alt = "Picture of me" width = "300" lenth = "500">
-          <br> 
+          <br>
           <h3 id = "name"> My Name</h3>
       </div>
-      <br> 
-      <p>Username: </p>  
+      <br>
+      <p>Username: </p>
       <p id = "user"></p>
       <p>Change Profile Picture:</p>
       <form action = "/insertPhoto" method = "post">
@@ -19,14 +19,14 @@
       <input type="submit">
       </form>
 
-      <br> 
+      <br>
       <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#myrecipes" aria-expanded="false" aria-controls="collapseExample">
           My Recipes
       </button>
 
       <div class = "collapse multi-collapse"" id = "myrecipes">
           <!-- start of card -->
-          <!-- <div class="card">
+        <div class="card">
               <div class="row ">
                 <div class="col-md-4">
                     <img id = "recipepic" src="../../resources/imgs/temp.png" class="w-100">
@@ -44,27 +44,7 @@
                         </div>
                   </div>
                 </div>
-          </div> -->
-          <% 
-            if(recipes)
-            {
-              //var apiKey= "ac9d1996174844fa8bd9d2ba7b497976";
-              var card = ''; 
-              recipes.forEach(function(id){
-                card += '<div class = "card"> <div class = "row"> <div class = "col-md-4"> <img src = ';
-                console.log('ASDSDADS');
-                var url= 'https://api.spoonacular.com/recipes/'+ id.recipe_id +'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';//randomizes a recipe to view in the card
-                $.ajax({url:url, dataType:"json"}).then(function(data){//calls out to the API with ajax
-                    console.log(data); 
-                    card += data.image + 'class = "w-100"> + </div> + <div class = "col-md-8 px-3"><h4 class = "card-title">';
-                    card += data.title + '</h4><p class = "card-text">Ready in' + data.readyInMinutes + '</p>'; 
-                    card += '<p class = "card-text">' + data.summary + '</p> <br>';
-                    card += '<a class = "btn btn-primary" href = ' + data.sourceUrl + ' role = "button">Go to Recipe</a>';
-                    card += "</div></div></div>";
-                })
-              }); 
-            }
-           %> <%-card%>
+          </div> 
 
           <!-- end of card -->
       </div>

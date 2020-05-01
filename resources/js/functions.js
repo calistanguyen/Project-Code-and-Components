@@ -111,19 +111,30 @@ function randomizeRecipe()
 function addRecipeToInv()
 {
   console.log(currentID);
+  console.log(localStorage.getItem('token'));
+  if(localStorage.getItem('token')==null)
+  {
+    alert('You need to be logged in to add recipes to your inventory!');
+    return;
+  }
+  if(currentID==0)
+  {
+    alert('Please choose a recipe before adding!');
+    return;
+  }
   $.ajax({
       url: "http://localhost:3000/add",
-      type: 'GET',
+      type: 'POST',
       data: {id: currentID},
       //id: currentID,
       // Fetch the stored token from localStorage and set in the header
       headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
   }).done((response) => {
-    // if(response.success==true)
-    // {
-    //   alert("Recipe successfully added to your inventory.");
-    // }else{
-    //   alert("There was an error trying to add this recipe!");s
-    // }
+    if(response.success==true)
+    {
+      alert("Recipe successfully added to your inventory.");
+    }else{
+      alert("There was an error trying to add this recipe!");s
+    }
   });
 }

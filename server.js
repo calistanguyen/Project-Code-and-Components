@@ -31,7 +31,13 @@ const dbConfig = {
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD
 };
-var db = pgp(dbConfig);
+if(process.env.DATABASE_URL!=undefined)
+{
+  var db= pgp(process.env.DATABASE_URL);
+}else {
+  var db = pgp(dbConfig);
+}
+
 
 
 // set the view engine to ejs
@@ -57,7 +63,7 @@ const authenticateJWT = (req, res, next) => {
             //req.userId = data.userId;
             req.user = data.userId;
             req.name = data.firstname;
-            req.id = data.id; 
+            req.id = data.id;
             req.authenticated=true;
             next();
           }else{
@@ -74,16 +80,45 @@ const authenticateJWT = (req, res, next) => {
 };
 
 app.get('/profile_info', authenticateJWT, (req, res) => {
-  //query for all recipes that a user has saved
-
   if(req.authenticated==true){
-    // make database call using userId
     res.send({authenticated: true, username: req.user, name: req.name, userid: req.id});
   } else {
     res.send({authenticated: false, username: null, name: null});
   }
 
 });
+
+app.get('/profile_recipes', authenticateJWT, (req,res) => {
+  if(req.authenticated==true)
+  {
+    var user = req.id;
+    console.log(user);
+    var recipes = "SELECT * FROM saved_recipes WHERE user_id = " + user + ";";
+    console.log(recipes);
+    db.any(recipes)
+    .then(function(rows){
+      var url_params='';
+      var url = "https://api.spoonacular.com/recipes/informationBulk?ids=";
+      rows.forEach(row=>{
+        url_params+= row.recipe_id + ','
+      })
+      url_params= url_params.slice(0, url_params.length-1);
+      url_params+= '&apiKey=ac9d1996174844fa8bd9d2ba7b497976'
+      url+=url_params;
+      console.log(url);
+      request(url, {json:true}, (err,response,recipes)=>{//calls out to API for informatiomn
+        res.send({recipe_arr: recipes, authenticated:true});
+      })
+    })
+    .catch(function(err){
+      console.log(err);
+    })
+  }else{
+    res.send({authenticated:false});
+  }
+  //database query
+
+})
 
 
 app.post('/login', (req, res) => {
@@ -132,15 +167,18 @@ app.post('/login', (req, res) => {
 app.post('/add',authenticateJWT, function(req, res){
   //take id from the page and info from the token and put it into the table
   console.log(req.body.id);
-  console.log(req.id); 
-  var userId = req.id; 
-  var recipeId = req.body.id; 
+  console.log(req.id);
+  var userId = req.id;
+  var recipeId = req.body.id;
   var addRecipe = "INSERT INTO saved_recipes(user_id, recipe_id) VALUES(" + userId + ", '"+recipeId + "');";
   db.any(addRecipe)
   .then(function(rows){
-    res.render('pages/home');
+    console.log(rows);
+    res.json({success:true});
+    //res.render('pages/home');
   })
   .catch(function(err){
+    res.json({success:false});
     console.log(err);
   })
 
@@ -149,29 +187,13 @@ app.post('/add',authenticateJWT, function(req, res){
 
 //home page
 app.get('/home', authenticateJWT, function(req, res) {
-  console.log(req.user)
-  res.render('pages/home'); 
+  console.log('User:' + req.user)
+  res.render('pages/home');
 });
 
 //profile page
-app.get('/profile', authenticateJWT, function(req, res){
-  var user = req.id; 
-  console.log(user);
-  var recipes = "SELECT * FROM saved_recipes WHERE user_id = " + user + ";";
-  console.log(recipes);
-  db.any(recipes)
-  .then(function(rows){
-    console.log(rows);
-    res.render('pages/profile',{
-      recipes: rows,
-    })
-  })
-  .catch(function(err){
-    console.log(err);
-    res.render('pages/profile', {
-      recipes: '',
-    });
-  })
+app.get('/profile', function(req, res){
+  res.render('pages/profile');
 });
 
 //recipe page
@@ -182,7 +204,7 @@ app.get('/recipe', function(req,res){
 	var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';//gets info from API
 	request(url, {json:true}, (err,response,body)=>{//calls out to API for information
 		var ingredients=body.extendedIngredients;
-		console.log(ingredients);
+		//console.log(ingredients);
 		res.render('pages/recipe',{ //gives information to the recipes page
 			recipe_name: body.title,
 			cook_time: body.readyInMinutes,
