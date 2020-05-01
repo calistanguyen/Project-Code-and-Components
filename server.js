@@ -63,6 +63,7 @@ const authenticateJWT = (req, res, next) => {
             //req.userId = data.userId;
             req.user = data.userId;
             req.name = data.firstname;
+            req.lastname = data.lastname;
             req.id = data.id;
             req.authenticated=true;
             next();
@@ -81,7 +82,7 @@ const authenticateJWT = (req, res, next) => {
 
 app.get('/profile_info', authenticateJWT, (req, res) => {
   if(req.authenticated==true){
-    res.send({authenticated: true, username: req.user, name: req.name, userid: req.id});
+    res.send({authenticated: true, username: req.user, name: req.name, lname: req.lastname, userid: req.id});
   } else {
     res.send({authenticated: false, username: null, name: null});
   }
@@ -140,7 +141,7 @@ app.post('/login', (req, res) => {
       console.log(rows.length);
       if(rows.length>0)//if there is data in the query
       {
-        const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, firstname: rows[0].firstname, id: rows[0].user_id}, accessTokenSecret);
+        const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, lastname: rows[0].lastname, firstname: rows[0].firstname, id: rows[0].user_id}, accessTokenSecret);
         console.log("Returning response")
         res.json({accessToken: accessToken, success: true})
       }

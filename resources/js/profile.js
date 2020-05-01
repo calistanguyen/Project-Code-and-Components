@@ -1,6 +1,7 @@
 function loadDefaultProfile(){
   // just put generic pictures or emails etc,.
   document.getElementById('name').innerText = "You have not logged in yet!";
+  document.getElementById('msg').innerText = "Click the login button in the navbar to login or sign up for an account!";
 }
 
 function getProfileInfo(){
@@ -15,9 +16,9 @@ function getProfileInfo(){
     }).done((response) => {
 
       if (response.authenticated){
-        console.log('YESSS');
-      	  $('#name').html(response.name); //id
-          $('#user').html(response.username);
+        document.getElementById('name').innerText = "Hello, " + response.name + " " + response.lname + "!";
+        document.getElementById('msg').innerText = "Click on the 'My Recipes' button below to view your recipes!";
+
       } else {
 		      loadDefaultProfile();
       }
