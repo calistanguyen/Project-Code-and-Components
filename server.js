@@ -146,11 +146,11 @@ app.post('/login', (req, res) => {//endpoint that searches the database for a us
       {
         const accessToken = jwt.sign({ userId: rows[0].username,  password: rows[0].password, lastname: rows[0].lastname, firstname: rows[0].firstname, id: rows[0].user_id}, accessTokenSecret);
         console.log("Returning response")
-        res.json({accessToken: accessToken, success: true})
+        res.send({accessToken: accessToken, success: true})
       }
       else //if there is no data in the query
       {
-        res.json({success: false});
+        res.send({success: false});
       }
   })
   .catch(function(err){

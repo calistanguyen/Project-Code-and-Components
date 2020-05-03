@@ -1,6 +1,6 @@
 
 console.log("Loaded functions.js");
-var apiKey= process.env.API_KEY;
+var apiKey= 'ac9d1996174844fa8bd9d2ba7b497976';
 var currentID=0;
 
 $(document).ready(() => {//every time the login form is submitted, this intercepts the form info and sends it to the endpoint on the server
@@ -86,7 +86,7 @@ function addRecipeToInv()//takes the currentID of the recipe that is being displ
     return;
   }
   $.ajax({
-      url: "http://localhost:3000/add",
+      url: "https://group6-finalproject-tender.herokuapp.com/add",
       type: 'POST',
       data: {id: currentID},
       //id: currentID,
@@ -110,7 +110,7 @@ function removeRecipe(remove_id)//removes a specified recipe from a users saved 
 {
   console.log("Remove ID:" + remove_id);
   $.ajax({
-      url: "http://localhost:3000/remove",
+      url: "https://group6-finalproject-tender.herokuapp.com/remove",
       type: 'POST',
       data: {id: remove_id},
       //id: currentID,

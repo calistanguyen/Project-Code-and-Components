@@ -9,7 +9,7 @@ function getProfileInfo(){
   // If there is a valid token the response should print out the username in the
   // browser console. This is all handled in the authenticateJWT middleware function.
     $.ajax({
-        url: "http://localhost:3000/profile_info",
+        url: "https://group6-finalproject-tender.herokuapp.com/profile_info",
         type: 'GET',
         // Fetch the stored token from localStorage and set in the header
         headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
@@ -28,7 +28,7 @@ function getProfileInfo(){
 function getUserCards()//this takes the recipes from a request from the server and creates cards for each of the saved recipes to be displayed on the profile page
 {
   $.ajax({
-    url: "http://localhost:3000/profile_recipes",
+    url: "https://group6-finalproject-tender.herokuapp.com/profile_recipes",
     type: 'GET',
     // Fetch the stored token from localStorage and set in the header
     headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
