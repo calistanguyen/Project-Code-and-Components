@@ -80,6 +80,10 @@ const authenticateJWT = (req, res, next) => {//this function check the authentic
   }
 };
 
+app.get('/', function(req,res){
+  res.render('pages/home');
+});
+
 app.get('/profile_info', authenticateJWT, (req, res) => {//sends info about the user to the profile page to load
   if(req.authenticated==true){
     res.send({authenticated: true, username: req.user, name: req.name, lname: req.lastname, userid: req.id});
