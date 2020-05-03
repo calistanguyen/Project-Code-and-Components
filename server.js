@@ -47,7 +47,7 @@ app.use(express.static(__dirname + '/'));//This line is necessary for us to use 
 
 const accessTokenSecret = 'tenderproject';
 
-const authenticateJWT = (req, res, next) => {
+const authenticateJWT = (req, res, next) => {//this function check the authentication of a user given the JWT generated at login
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -80,7 +80,7 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-app.get('/profile_info', authenticateJWT, (req, res) => {
+app.get('/profile_info', authenticateJWT, (req, res) => {//sends info about the user to the profile page to load
   if(req.authenticated==true){
     res.send({authenticated: true, username: req.user, name: req.name, lname: req.lastname, userid: req.id});
   } else {
@@ -89,11 +89,11 @@ app.get('/profile_info', authenticateJWT, (req, res) => {
 
 });
 
-app.get('/profile_recipes', authenticateJWT, (req,res) => {
+app.get('/profile_recipes', authenticateJWT, (req,res) => {//sends all of the recipe IDs that the user has stored in their inventory
   if(req.authenticated==true)
   {
     var user = req.id;
-    console.log(user);
+    console.log('USERID:'+user);
     var recipes = "SELECT * FROM saved_recipes WHERE user_id = " + user + ";";
     console.log(recipes);
     db.any(recipes)
@@ -106,7 +106,6 @@ app.get('/profile_recipes', authenticateJWT, (req,res) => {
       url_params= url_params.slice(0, url_params.length-1);
       url_params+= '&apiKey=ac9d1996174844fa8bd9d2ba7b497976'
       url+=url_params;
-      console.log(url);
       request(url, {json:true}, (err,response,recipes)=>{//calls out to API for informatiomn
         res.send({recipe_arr: recipes, authenticated:true});
       })
@@ -122,8 +121,8 @@ app.get('/profile_recipes', authenticateJWT, (req,res) => {
 })
 
 
-app.post('/login', (req, res) => {
-  console.log("Reaching this?")
+app.post('/login', (req, res) => {//endpoint that searches the database for a user with username and password
+  //console.log("Reaching this?")
   //Read username and password from request body
   const username = req.body.uname;
   const password = req.body.pword;
@@ -156,14 +155,35 @@ app.post('/login', (req, res) => {
 
 });
 
-app.post('/add',authenticateJWT, function(req, res){
+app.post('/add',authenticateJWT, function(req, res){//adds a given recipe from the homepage to the saved_recipes table so that a user can look at recipes they have saved later
   //take id from the page and info from the token and put it into the table
-  console.log(req.body.id);
-  console.log(req.id);
+  console.log('RECIPE:' +req.body.id);
+  console.log('USER:' + req.id);
   var userId = req.id;
   var recipeId = req.body.id;
   var addRecipe = "INSERT INTO saved_recipes(user_id, recipe_id) VALUES(" + userId + ", '"+recipeId + "');";
   db.any(addRecipe)
+  .then(function(rows){
+    console.log(rows);
+    res.json({success:true});
+    //res.render('pages/home');
+  })
+  .catch(function(err){
+    res.json({success:false});
+    console.log(err);
+  })
+
+});
+
+app.post('/remove', authenticateJWT , function(req, res){//removes a certain recipe the user specifies on the profile page from their inventory
+  //take id from the page and info from the token and put it into the table
+  console.log(req.body);
+  console.log('RECIPE REMOVE:' + req.body.id);
+  console.log('USER:' + req.id);
+  var userId = req.id;
+  var recipeId = req.body.id;
+  var removeRecipe = "DELETE FROM saved_recipes WHERE user_id="+userId+"AND recipe_id="+recipeId;
+  db.any(removeRecipe)
   .then(function(rows){
     console.log(rows);
     res.json({success:true});
@@ -213,13 +233,12 @@ app.get('/recipe', function(req,res){
 //sign up page
 
 app.get('/signup', function(req,res){
-
   res.render('pages/signup');
 });
 
 
 
-app.post('/signup', function(req,res){
+app.post('/signup', function(req,res){//this is used to store new information from a signup in the database
   var username = req.body.username; //receive all the input from the
   var firstname = req.body.firstname;
   var lastname = req.body.lastname;

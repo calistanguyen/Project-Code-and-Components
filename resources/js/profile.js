@@ -25,7 +25,7 @@ function getProfileInfo(){
 
     });
 }
-function getUserCards()
+function getUserCards()//this takes the recipes from a request from the server and creates cards for each of the saved recipes to be displayed on the profile page
 {
   $.ajax({
     url: "http://localhost:3000/profile_recipes",
@@ -33,9 +33,12 @@ function getUserCards()
     // Fetch the stored token from localStorage and set in the header
     headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
     }).done((response) => {
-      if (response.recipe_arr.status=="failure")
+      if(localStorage.getItem('token')==null)
       {
-        alert('There was an issue loading your recipes!');
+        return;
+      }
+      else if (response.recipe_arr.status=="failure")
+      {
         return;
       }
       if(response.authenticated==true)
@@ -44,7 +47,7 @@ function getUserCards()
         console.log(response);
         response.recipe_arr.forEach(recipe=>{
 
-          cards += buildCards(recipe.sourceUrl, recipe.image, recipe.title, recipe.summary, recipe.readyInMinutes);
+          cards += buildCards(recipe.sourceUrl, recipe.image, recipe.title, recipe.summary, recipe.readyInMinutes, recipe.id);
         })
         $('#myrecipes').html(cards);
         //load the recipes into HTML
@@ -53,20 +56,21 @@ function getUserCards()
       }
     });
 }
-
-function buildCards(recipeUrl, recipeImg, recipeName, recipeDesc, recipeMins){
+//builds an individual recipe card with the necessary information
+function buildCards(recipeUrl, recipeImg, recipeName, recipeDesc, recipeMins, recipeID){
   //build a card
   var card= '';
   card += '<div class = "card"> <div class = "row"> <div class = "col-md-4"> <img src = ';
   card += recipeImg + ' class = "w-100">  </div>  <div class = "col-md-8 px-3"><h4 class = "card-title">';
   card += recipeName + '</h4><p class = "card-text">Ready in: ' + recipeMins + '</p>';
   card += '<p class = "card-text" font-size = "smaller">' + recipeDesc + '</p> <br>';
-  card += '<a class = "btn btn-primary" href = ' + recipeUrl + ' role = "button">Go to Recipe</a>';
+  card += '<a class = "btn btn-primary" href = ' + recipeUrl + ' role = "button">Go to Recipe</a><br><br>';
+  card += '<button type="button" class="btn btn-danger" onclick= "removeRecipe('+ recipeID+')">Remove from Inventory</button>'
   card += "</div></div></div>";
   return card;
 }
 
-
+//whenever the profile page is loaded, it invoked both functions
 $("document").ready(() =>{
 	if($('body').is('.profile')){
       getProfileInfo()

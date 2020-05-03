@@ -3,24 +3,7 @@ console.log("Loaded functions.js");
 var apiKey= "ac9d1996174844fa8bd9d2ba7b497976";
 var currentID=0;
 
-// function testWebToken(){
-//   // This will make an ajax call with the token stored in local storage.
-//   // If there is a valid token the response should print out the username in the
-//   // browser console. This is all handled in the authenticateJWT middleware function.
-//     $.ajax({
-//         url: "http://localhost:3000/profile_info",
-//         type: 'GET',
-//         // Fetch the stored token from localStorage and set in the header
-//         headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
-//     }).done((response) => {
-//       // do stuff with response
-//       console.log(response)
-//       console.log("Look, you can now authenticate!")
-//     });
-// }
-
-
-$(document).ready(() => {
+$(document).ready(() => {//every time the login form is submitted, this intercepts the form info and sends it to the endpoint on the server
   $("#loginform").submit((event) => {
     /* stop form from submitting normally */
     event.preventDefault();
@@ -42,7 +25,7 @@ $(document).ready(() => {
     });
 })
 
-$(document).ready(() => {
+$(document).ready(() => { //intercepts the signup form information when submitted and sends it to the server to be added to the database
   $("#signupform").submit((event) => {
     /* stop form from submitting normally */
     event.preventDefault();
@@ -63,13 +46,17 @@ function setCurrID(id)
   currentID=id;
 }
 
-function goToRecipe()
+function goToRecipe()//reroutes to the recipe page with the currentID
 {
+  if(currentID==0){
+    alert('Please select a recipe before attempting to view.');
+    return;
+  }
   //reroutes the pages to the recipe page with the given recipe's ID
   window.location.href="/recipe?id="+currentID;
 }
 
-function randomizeRecipe()
+function randomizeRecipe()//when a user click the Get Random Recipe button on the homepage, this function calls out the spoonacular API for a random recipe
 {
   var url= "https://api.spoonacular.com/recipes/random?apiKey="+apiKey;//randomizes a recipe to view in the card
   $.ajax({url:url, dataType:"json"}).then(function(data){//calls out to the API with ajax
@@ -84,7 +71,7 @@ function randomizeRecipe()
   })
 }
 
-function addRecipeToInv()
+function addRecipeToInv()//takes the currentID of the recipe that is being displayed and sends it to the server to be added to the database
 {
   console.log(currentID);
   console.log(localStorage.getItem('token'));
@@ -117,4 +104,24 @@ function addRecipeToInv()
 function logout()
 {
   localStorage.removeItem('token');
+}
+
+function removeRecipe(remove_id)//removes a specified recipe from a users saved recipes
+{
+  console.log("Remove ID:" + remove_id);
+  $.ajax({
+      url: "http://localhost:3000/remove",
+      type: 'POST',
+      data: {id: remove_id},
+      //id: currentID,
+      // Fetch the stored token from localStorage and set in the header
+      headers: {"Authorization": "Bearer " +  localStorage.getItem('token')}
+  }).done((response) => {
+    if(response.success==true)
+    {
+      alert("Recipe successfully removed from your inventory.");
+    }else{
+      alert("There was an error trying to remove this recipe!");
+    }
+  });
 }
