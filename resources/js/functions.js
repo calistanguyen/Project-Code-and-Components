@@ -1,6 +1,6 @@
 
 console.log("Loaded functions.js");
-var apiKey= "ac9d1996174844fa8bd9d2ba7b497976";
+var apiKey= process.env.API_KEY;
 var currentID=0;
 
 $(document).ready(() => {//every time the login form is submitted, this intercepts the form info and sends it to the endpoint on the server

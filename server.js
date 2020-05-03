@@ -45,7 +45,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/'));//This line is necessary for us to use relative paths and access our resources directory
 
 
-const accessTokenSecret = 'tenderproject';
+const accessTokenSecret = process.env.TOKEN_SECRET;
 
 const authenticateJWT = (req, res, next) => {//this function check the authentication of a user given the JWT generated at login
   const authHeader = req.headers.authorization;
@@ -104,7 +104,7 @@ app.get('/profile_recipes', authenticateJWT, (req,res) => {//sends all of the re
         url_params+= row.recipe_id + ','
       })
       url_params= url_params.slice(0, url_params.length-1);
-      url_params+= '&apiKey=ac9d1996174844fa8bd9d2ba7b497976'
+      url_params+= '&apiKey='+process.env.API_KEY
       url+=url_params;
       request(url, {json:true}, (err,response,recipes)=>{//calls out to API for informatiomn
         res.send({recipe_arr: recipes, authenticated:true});
@@ -213,7 +213,7 @@ app.get('/recipe', function(req,res){
 	//console.log(req);
 	var id= req.query.id;//parses the ID from the query
 	console.log(id);
-	var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey=ac9d1996174844fa8bd9d2ba7b497976';//gets info from API
+	var url= 'https://api.spoonacular.com/recipes/'+id+'/information?apiKey='+process.env.API_KEY;//gets info from API
 	request(url, {json:true}, (err,response,body)=>{//calls out to API for information
 		var ingredients=body.extendedIngredients;
 		//console.log(ingredients);
@@ -255,5 +255,4 @@ app.post('/signup', function(req,res){//this is used to store new information fr
 
 
 
-app.listen(3000);
-console.log('3000 is the magic port');
+app.listen(process.env.PORT);
