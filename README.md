@@ -12,6 +12,7 @@ To run this application, you can download all of the files or clone the reposito
 <br/>You will also need your own instance of the spoonacular API. This resource is free and only requires you to sign up.
 
 ### List of variables for a .env file
+* PORT              (*this will be the port that the server runs off*)
 * DATABASE_HOST     (*generally localhost*)
 * DATABASE_PORT     (*whatever port you host your PSQL server on*)
 * DATABASE_NAME     (*name of the database you created*)
@@ -21,6 +22,7 @@ To run this application, you can download all of the files or clone the reposito
 * TOKEN_SECRET      (*this can be whatever you choose, this is used for JWT token encryption*)
 
 ##### Note: In the functions.js file you will need to copy-paste your own API key into the apiKey variable. This was a caveat with one of our functions.
+##### Note 2: To run this locally you have to change the endpoints in the URLs of the ajax calls in the function.js and profile.js back to localhost:(*insert your port*)
 
 # Deployment
 You can also access our own website [here.](https://group6-finalproject-tender.herokuapp.com/)<br/>
