@@ -13,16 +13,15 @@ For your Postgres server, we have a .sql file that you can use to set up your se
 You will also need your own instance of the spoonacular API. This resource is free and only requires you to sign up.
 
 ### List of variables for a .env file
-* DATABASE_HOST (*generally localhost*)
-* DATABASE_PORT (*whatever port you host your PSQL server on*)
-* DATABASE_NAME (*name of the database you created*)
-* DATABASE_USER (*your PC's username*)
+* DATABASE_HOST     (*generally localhost*)
+* DATABASE_PORT     (*whatever port you host your PSQL server on*)
+* DATABASE_NAME     (*name of the database you created*)
+* DATABASE_USER     (*your PC's username*)
 * DATABASE_PASSWORD (*this can be set in the Postgres settings*)
-* API_KEY (*your personal API key provided by spoonacular*)
-* TOKEN_SECRET (*this can be whatever you choose, this is used for JWT token encryption*)
+* API_KEY           (*your personal API key provided by spoonacular*)
+* TOKEN_SECRET      (*this can be whatever you choose, this is used for JWT token encryption*)
 
-###### Note:
-In the functions.js file you will need to copy-paste your own API key into the apiKey variable. This was a caveat with one of our functions.
+##### Note: In the functions.js file you will need to copy-paste your own API key into the apiKey variable. This was a caveat with one of our functions.
 
 # Deployment
 You can also access our own website [here](https://group6-finalproject-tender.herokuapp.com/)
