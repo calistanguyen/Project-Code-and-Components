@@ -23,5 +23,5 @@ To run this application, you can download all of the files or clone the reposito
 ##### Note: In the functions.js file you will need to copy-paste your own API key into the apiKey variable. This was a caveat with one of our functions.
 
 # Deployment
-You can also access our own website [here](https://group6-finalproject-tender.herokuapp.com/)
+You can also access our own website [here.](https://group6-finalproject-tender.herokuapp.com/)<br/>
 This is our personal deployment through Heroku that you can access and use at any time!
