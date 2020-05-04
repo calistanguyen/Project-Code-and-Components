@@ -7,10 +7,9 @@ you are able to view them another time.
 In this project, we utilized PostgreSQL for our database server, NodeJS, JWT, and Spoonacular. 
 
 # How to use the build
-To run this application, you can download all of the files or clone the repository and run a Node.js server from your local machine.
-You need to have Node.js installed, and you must create your own .env file for environment variables.
-For your Postgres server, we have a .sql file that you can use to set up your server with the correct format.
-You will also need your own instance of the spoonacular API. This resource is free and only requires you to sign up.
+To run this application, you can download all of the files or clone the repository and run a Node.js server from your local machine.<br/> You need to have Node.js installed, and you must create your own .env file for environment variables.
+<br/>For your Postgres server, we have a .sql file in the /resources/database folder that you can use to set up your server with the correct format.
+<br/>You will also need your own instance of the spoonacular API. This resource is free and only requires you to sign up.
 
 ### List of variables for a .env file
 * DATABASE_HOST     (*generally localhost*)
